@@ -289,7 +289,11 @@ getLicense flags = do
     checkLicenseInvalid (Just (UnknownLicense t))
       | needSpdx  = case eitherParsec t :: Either String SPDX.License of
                       Right _ -> Nothing
-                      Left _  -> Just "\nThe license must be a valid SPDX expression."
+                      Left _  -> Just ( "\nThe license must be a valid SPDX expression." ++
+                                        "\n - On the SPDX License List: https://spdx.org/licenses/" ++
+                                        "\n - NONE, if you do not want to grant any license" ++
+                                        "\n - LicenseRef-( alphanumeric | - | . )+"
+                                      )
       | otherwise = if any (not . isAlphaNum) t
                     then Just promptInvalidOtherLicenseMsg
                     else Nothing
